@@ -43,13 +43,14 @@ def train(epochs=3):
 def test():
     model.eval()
     with torch.no_grad():
-        loss = 0.0
+        loss, n = 0.0, 0
 
         for users, items, ratings in test_loader:
             pred = model(users, items)
-            loss += loss_fn(pred, ratings).item()
+            loss += loss_fn(pred, ratings).item() * len(ratings)
+            n += len(ratings)
 
-    return loss
+    return loss / n
 
 
 
